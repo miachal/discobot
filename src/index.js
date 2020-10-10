@@ -39,6 +39,12 @@ bot.on('message', async (msg) => {
   if (msg.content.startsWith(prefix)) {
     const rest = msg.content.slice(1);
 
+    if (rest === 'help') {
+      msg.channel.send(
+        '!help, !add <yt>, !queue, !skip, !pause, !resume, !pleasestoph'
+      );
+    }
+
     if (rest.startsWith('add')) {
       const [, song] = rest.split(/ (.*)/);
       await addToQueue(msg.author.username, song);
@@ -55,16 +61,14 @@ bot.on('message', async (msg) => {
       });
     }
 
-    if (rest === 'next') {
+    if (rest === 'skip') {
       queue.shift();
-      const [current] = queue;
-      play(queue);
-      msg.channel.send(current.song);
+      voiceConnectionDispatcher.end();
     }
 
     if (rest === 'pleasestoph') {
-      queue = [];
-      stop();
+      queue.length = 0;
+      pause();
     }
 
     if (rest === 'pause') {
@@ -97,7 +101,7 @@ async function addToQueue(author, song) {
   });
 }
 
-function stop() {
+function pause() {
   voiceConnectionDispatcher.pause();
   isPlaying = false;
 }
@@ -113,24 +117,17 @@ function play(song) {
     voiceConnectionDispatcher = voiceConnection
       .play(ytdl(song, { filter: 'audioonly' }), { volume: 0.5 })
       .on('finish', (f) => {
-        console.log('finish: ', f);
         isPlaying = false;
         resolve();
       })
       .on('error', (e) => {
-        console.log('error: ', e);
         isPlaying = false;
         reject();
-      })
-      .on('speaking', (user, speaking) => {
-        console.log('User: ', user);
-        console.log('Speaking: ', speaking);
       });
   });
 }
 
 async function dispatch() {
-  console.log('Dispatch. (', queue.length, ')');
   if (queue.length === 0) {
     await new Promise((r) => setTimeout(r, 5000));
   }
