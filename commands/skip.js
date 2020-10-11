@@ -5,7 +5,7 @@ module.exports = {
     if (queue.length <= 1) return;
 
     if (client.isPlaying && client.vcd) {
-      client.vcd.pause();
+      client.vcd.end();
       client.isPlaying = false;
     }
   },
