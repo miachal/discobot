@@ -2,13 +2,13 @@
 
 Simple discord music bot.
 
-##### config.json
+##### config
 
 ```
 {
-  "version": "0.0.1",
-  "prefix": "!",
-  "channel": "music",
-  "token": "discord_token"
+  version: '0.0.1',
+  prefix: '!',
+  channel: process.env.DISCOBOT_CHANNEL || 'music',
+  token: process.env.DISCOBOT_TOKEN
 }
 ```

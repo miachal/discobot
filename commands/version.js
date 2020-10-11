@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-const { version } = require('../config.json');
+const { version } = require('../config');
 
 module.exports = {
   cmd: 'version',

@@ -1,4 +1,4 @@
-const { channel } = require('../config.json');
+const { channel } = require('../config');
 
 module.exports = {
   event: 'ready',

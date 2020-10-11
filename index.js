@@ -4,7 +4,7 @@ const { join } = require('path');
 const { Client } = require('discord.js');
 
 const dispatcher = require('./utils/dispatcher');
-const { token } = require('./config.json');
+const { token } = require('./config');
 
 const client = new Client();
 client.dispatcher = dispatcher({
