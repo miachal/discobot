@@ -1,4 +1,6 @@
+const { MessageEmbed } = require('discord.js');
 const yts = require('yt-search');
+const { parseSeconds } = require('../utils/time');
 const { checkYoutube } = require('../utils/yt');
 
 module.exports = {
@@ -7,23 +9,33 @@ module.exports = {
   run: async ({ msg, queue }) => {
     if (!msg.params) return;
 
+    const embed = new MessageEmbed()
+      .setColor(0xff0000)
+      .setTitle('♪ added to queue');
+
     const ytDetails = await checkYoutube(msg.params);
     if (ytDetails) {
       queue.push({
         author: msg.author.username,
         ...ytDetails,
       });
-      return;
+      embed.setDescription(
+        `${parseSeconds(ytDetails.length)}: ${ytDetails.fullTitle}`
+      );
+    } else {
+      const { videos } = await yts(msg.params);
+      const { title, seconds, videoId } = videos[0];
+
+      queue.push({
+        author: msg.author.username,
+        song: videoId,
+        title,
+        length: seconds,
+      });
+
+      embed.setDescription(`${parseSeconds(seconds)}: ${title}`);
     }
 
-    const { videos } = await yts(msg.params);
-    const { title, seconds, videoId } = videos[0];
-
-    queue.push({
-      author: msg.author.username,
-      song: videoId,
-      title: title,
-      length: seconds,
-    });
+    msg.channel.send(embed);
   },
 };
