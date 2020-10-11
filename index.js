@@ -1,14 +1,11 @@
 const Discord = require('discord.js');
 const { channel, prefix, token } = require('./config.json');
-const ytdl = require('ytdl-core');
-const yts = require('yt-search');
 const moment = require('moment');
 const path = require('path');
 const fs = require('fs');
 const dispatcher = require('./utils/dispatcher');
 
 const queue = [];
-let isPlaying = false;
 
 const client = new Discord.Client();
 client.dispatcher = dispatcher({
@@ -40,18 +37,18 @@ client.events.forEach((e) => {
   client[e.type](e.event, e.f(client));
 });
 
-client.on('message', async (msg) => {
-  if (!msg.guild) return;
-  if (msg.content.startsWith(prefix)) {
-    const rest = msg.content.slice(1);
-    [msg.command, msg.params] = rest.split(/ (.*)/);
+// client.on('message', async (msg) => {
+//   if (!msg.guild) return;
+//   if (msg.content.startsWith(prefix)) {
+//     const rest = msg.content.slice(1);
+//     [msg.command, msg.params] = rest.split(/ (.*)/);
 
-    if (msg.command in client.commands) {
-      await client.commands[msg.command].run({
-        client,
-        msg,
-        queue,
-      });
-    }
-  }
-});
+//     if (msg.command in client.commands) {
+//       await client.commands[msg.command].run({
+//         client,
+//         msg,
+//         queue,
+//       });
+//     }
+//   }
+// });
