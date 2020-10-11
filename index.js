@@ -5,13 +5,11 @@ const path = require('path');
 const fs = require('fs');
 const dispatcher = require('./utils/dispatcher');
 
-const queue = [];
-
 const client = new Discord.Client();
 client.dispatcher = dispatcher({
-  queue,
   client,
 });
+client.queue = [];
 client.isPlaying = false;
 client.commands = {};
 client.events = [];
@@ -36,19 +34,3 @@ client.login(token);
 client.events.forEach((e) => {
   client[e.type](e.event, e.f(client));
 });
-
-// client.on('message', async (msg) => {
-//   if (!msg.guild) return;
-//   if (msg.content.startsWith(prefix)) {
-//     const rest = msg.content.slice(1);
-//     [msg.command, msg.params] = rest.split(/ (.*)/);
-
-//     if (msg.command in client.commands) {
-//       await client.commands[msg.command].run({
-//         client,
-//         msg,
-//         queue,
-//       });
-//     }
-//   }
-// });

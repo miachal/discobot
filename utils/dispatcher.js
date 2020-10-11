@@ -1,16 +1,16 @@
 const play = require('./play');
 
-module.exports = ({ queue, client }) => {
+module.exports = ({ client }) => {
   const dispatch = async () => {
-    if (queue.length === 0) {
+    if (client.queue.length === 0) {
       await new Promise((r) => setTimeout(r, 5000));
     }
 
-    while (queue.length > 0) {
-      const { song } = queue[0];
+    while (client.queue.length > 0) {
+      const { song } = client.queue[0];
       await play({ client })(song);
 
-      if (queue.length > 1) queue.shift();
+      if (client.queue.length > 1) client.queue.shift();
     }
     dispatch();
   };

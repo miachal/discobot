@@ -6,7 +6,7 @@ const { checkYoutube } = require('../utils/yt');
 module.exports = {
   cmd: 'add',
   description: 'Adds song to the play queue.',
-  run: async ({ msg, queue }) => {
+  run: async ({ client, msg }) => {
     if (!msg.params) return;
 
     const embed = new MessageEmbed()
@@ -15,7 +15,7 @@ module.exports = {
 
     const ytDetails = await checkYoutube(msg.params);
     if (ytDetails) {
-      queue.push({
+      client.queue.push({
         author: msg.author.username,
         ...ytDetails,
       });
@@ -26,7 +26,7 @@ module.exports = {
       const { videos } = await yts(msg.params);
       const { title, seconds, videoId } = videos[0];
 
-      queue.push({
+      client.queue.push({
         author: msg.author.username,
         song: videoId,
         title,

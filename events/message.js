@@ -3,7 +3,7 @@ const { prefix } = require('../config.json');
 module.exports = {
   event: 'message',
   type: 'on',
-  f: (client, queue) => async (msg) => {
+  f: (client) => async (msg) => {
     if (!msg.guild) return;
     if (msg.content.startsWith(prefix)) {
       const rest = msg.content.slice(1);
@@ -13,7 +13,6 @@ module.exports = {
         await client.commands[msg.command].run({
           client,
           msg,
-          queue,
         });
       }
     }
