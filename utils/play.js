@@ -9,6 +9,10 @@ module.exports = ({ client }) => async (song) =>
           filter: 'audioonly',
           quality: 'highestaudio',
           highWaterMark: 1 << 25,
+          requestOptions: {
+            maxRetries: 3,
+            maxReconnects: 3,
+          },
         }),
         { volume: 0.5 }
       )
