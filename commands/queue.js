@@ -14,7 +14,7 @@ module.exports = {
     const embed = new MessageEmbed().setColor(0xff0000);
 
     const totalTime = client.queue.reduce(
-      (total, { length }) => (total = total + length),
+      (total, { length }) => total + +length,
       0
     );
     embed.setTitle(
@@ -24,17 +24,16 @@ module.exports = {
     );
 
     const description = [];
-    client.queue.map(({ author, length, title }, idx) => {
-      description.push(
-        `${idx + 1}: ${title} (${parseSeconds(length)}) by ${author}`
-      );
+    client.queue.map(({ length, title }, idx) => {
+      description.push(`${idx + 1}: ${title} (${parseSeconds(length)})`);
       description.push('');
 
-      if (description.join('').length > 2000) {
+      if (description.join('').length > 1800) {
         const last = description.pop();
         embed.setDescription(description);
         msg.channel.send(embed);
 
+        description.length = 0;
         description.push(last);
         description.push('');
       }
