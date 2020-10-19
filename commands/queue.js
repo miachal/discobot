@@ -22,13 +22,24 @@ module.exports = {
         client.queue.length
       } | Total length: ${parseSeconds(totalTime)}`
     );
+
     const description = [];
     client.queue.map(({ author, length, title }, idx) => {
       description.push(
         `${idx + 1}: ${title} (${parseSeconds(length)}) by ${author}`
       );
       description.push('');
+
+      if (description.join('').length > 2000) {
+        const last = description.pop();
+        embed.setDescription(description);
+        msg.channel.send(embed);
+
+        description.push(last);
+        description.push('');
+      }
     });
+
     embed.setDescription(description);
     msg.channel.send(embed);
   },
